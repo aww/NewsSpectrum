@@ -1,35 +1,10 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+{% extends "wrapper.html" %}
 
-    <title>Starter Template for Bootstrap</title>
-
-    <!-- Bootstrap core CSS -->
-    <link href="static/dist/css/bootstrap.css" rel="stylesheet">
-
-    <!-- Custom styles for this template -->
-    <link href="static/starter-template.css" rel="stylesheet">
-
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-
-    <table class="table table-hover">
-        <tr><th>Topic Title</th><th>Reading level</th><th>Reading Ease</th><th>ARI</th><th>Article URL</th></tr>
-    {% for article in articles %}
-    <tr><td>{{ article['topic_title'] }}</td><td>{{ article['grade_level'] }}</td><td>{{ article['reading_ease'] }}</td><td>{{ article['ari'] }}</td><td><a href="{{ article['url'] }}">{{ article['url'] }}</a></td></tr>
-    {% endfor %}
-    </table>
-    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="static/dist/js/bootstrap.min.js"></script>
-</body>
-</html>
+{% block body %}
+<table class="table table-hover">
+  <tr><th>Topic Title</th><th>Reading level</th><th>Reading Ease</th><th>ARI</th><th>Article URL</th></tr>
+  {% for article in articles %}
+  <tr><td>{{ article['topic_title'] }}</td><td>{{ article['grade_level'] }}</td><td>{{ article['reading_ease'] }}</td><td>{{ article['ari'] }}</td><td><a href="{{ article['url'] }}">{{ article['url'] }}</a></td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
