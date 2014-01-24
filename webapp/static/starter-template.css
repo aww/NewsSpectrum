@@ -3,8 +3,17 @@ body {
 	margin-right: 20px;
 }
 
-body.landing {
+.landing {
   padding-top: 50px;
+}
+
+.landing h1 {
+  font-size: 500%;
+}
+
+img.banner-spectrum {
+	margin-top:    2em;
+	margin-bottom: 2em;
 }
 
 .starter-template {
@@ -32,5 +41,6 @@ body.landing {
 }
 
 h1 > img {
-	height: 1.5em;
+	height: .5em; /* 83px actual */
+	width: 857px;
 }

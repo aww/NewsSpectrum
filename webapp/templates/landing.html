@@ -30,14 +30,15 @@
   <div class="container">
 	
     <div class="starter-template">
-	  <img src="static/myspectrum.png" width="857" height="83" />
       <h1>NewsSpectrum</h1>
-      <p class="lead">NewsSpectrum finds other articles on the same topic <br /> and presents them in a spectrum from simple to more sophisticated.</p>
+	  <img class="banner-spectrum" src="static/myspectrum.png" width="857" height="40" /> <!-- actual height is 83px -->
+      <p class="lead">Given a current news article on technology, health, or science<br/>
+		find others on the same topic presented more simply or with more sophistication.</p>
       <form class="form-inline" role="form">
         <div class="form-group">
-          <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter a URL" size="150">
+          <input type="url" class="form-control" id="inputURL" placeholder="Enter an article URL" size="100">
         </div>
-        <button type="submit" class="btn btn-warning btn-lg">Search</button>
+        <button type="submit" class="btn btn-warning btn-lg">Go</button>
       </form>                                 
     </div>
 
