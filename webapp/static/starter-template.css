@@ -1,0 +1,36 @@
+body {
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+body.landing {
+  padding-top: 50px;
+}
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.article-body {
+	font-size: larger;
+	color: #505050;
+}
+
+.article-title {
+	color: #900000;
+	font-size: 150%;
+}
+
+
+.topic-title {
+	font-style: italic;
+	color: #006030;
+}
+.topic-title-text {
+	font-size: 70%;
+}
+
+h1 > img {
+	height: 1.5em;
+}
