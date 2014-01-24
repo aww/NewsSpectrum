@@ -44,3 +44,8 @@ h1 > img {
 	height: .5em; /* 83px actual */
 	width: 857px;
 }
+
+td.grade-level {
+	font-size: smaller;
+	color: #909090;
+}
