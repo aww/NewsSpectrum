@@ -5,12 +5,12 @@ from gnews.items import GnewsItem
 from BeautifulSoup import BeautifulSoup
 from goose import Goose
 
-limit_topics = 1000 #20
-limit_articles_per_topic = 1000 #80
+limit_topics = 100
+limit_articles_per_topic = 1000
 
 class ScienceSpider(Spider):
-    name = "gnews_metaonly"
-    allowed_domains = ["news.google.com"]
+    name = "gnews"
+    allowed_domains = []
     start_urls = [
         "https://news.google.com/news/section?pz=1&cf=all&topic=snc", # science
         "https://news.google.com/news/section?pz=1&cf=all&topic=tc", # technology
@@ -51,17 +51,24 @@ class ScienceSpider(Spider):
             if i >= limit_articles_per_topic:
                 break
             url = article_link.xpath('a/@href').extract()[0]
-            article = self.g.extract(url=url)
-            yield GnewsItem(gurl=response.url,
-                            url=url,
-                            title=article_link.xpath('a/span/text()').extract()[0],
-                            topic_title=response.meta['topic'],
-                            extract_title  = article.title,
-                            extract_desc   = article.meta_description,
-                            extract_text   = article.cleaned_text,
-                            )
-            #yield Request(url, callback=self.parse_article)
+            req = Request(url, callback=self.parse_article)
+            req.meta['gurl']        = response.url
+            req.meta['title']       = article_link.xpath('a/span/text()').extract()[0]
+            req.meta['topic_title'] = response.meta['topic']
+            yield req
+        for path in sel.xpath('//div[@id="pagination"]/table/tr/td/a/@href').extract():
+            req = Request('https://news.google.com' + path, callback=self.parse_fullcoverage)
+            req.meta['topic'] = response.meta['topic']
+            yield req
  
-    # def parse_article(self, response):
-    #     print "Article downloaded, contains", len(response.body), "characters."
-    #     yield ArticleItem(url=response.url, body=response.body)
+    def parse_article(self, response):
+        print "Article contains %6d characters: %s" % (len(response.body), response.url)
+        article = self.g.extract(raw_html=response.body)
+        return GnewsItem(gurl          = response.meta['gurl'],
+                         url           = response.url,
+                         title         = response.meta['title'],
+                         topic_title   = response.meta['topic_title'],
+                         extract_title = article.title,
+                         extract_desc  = article.meta_description,
+                         extract_text  = article.cleaned_text,
+                         )

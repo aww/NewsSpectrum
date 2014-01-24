@@ -56,3 +56,7 @@ class ScienceSpider(Spider):
                             extract_desc   = "",
                             extract_text   = "",
                             )
+        for path in sel.xpath('//div[@id="pagination"]/table/tr/td/a/@href').extract():
+            req = Request('https://news.google.com' + path, callback=self.parse_fullcoverage)
+            req.meta['topic'] = response.meta['topic']
+            yield req

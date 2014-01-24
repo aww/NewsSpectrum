@@ -14,5 +14,10 @@ NEWSPIDER_MODULE = 'gnews.spiders'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'gnews (+http://www.yourdomain.com)'
 
-FEED_URI = '/home/wilsona/scraper/gnews/items-%(time)s.json'
+FEED_URI = 'items-%(time)s.json'
 FEED_FORMAT = 'json'
+
+LOG_FILE = 'logging.txt'
+LOG_LEVEL = 'INFO'
+
+CONCURRENT_REQUESTS = 32 # default is 16, raise until process is CPU bound, possibly 100
