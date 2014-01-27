@@ -34,7 +34,7 @@ img.banner-spectrum {
 
 .topic-title {
 	font-style: italic;
-	color: #006030;
+	color: #909090;
 }
 .topic-title-text {
 	font-size: 70%;
@@ -48,4 +48,9 @@ h1 > img {
 td.grade-level {
 	font-size: smaller;
 	color: #909090;
+}
+
+.article-publisher {
+	font-size: 150%;
+	font-style: italic;
 }

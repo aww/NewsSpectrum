@@ -4,6 +4,7 @@ from flask import Flask, render_template, request
 #import MySQLdb
 import mysql.connector
 import re
+import urllib
 
 app = Flask(__name__)
 cnx = mysql.connector.connect(user='root', password='', 
@@ -12,7 +13,7 @@ cnx = mysql.connector.connect(user='root', password='',
 
 @app.route("/")
 def search():
-    url = request.args.get('q')
+    url = request.args.get('url')
     if url:
         con.cnx.cursor()
         con.execute("SELECT url, topic_title FROM article WHERE url = %s", (url,))
@@ -67,7 +68,17 @@ def list_all_articles():
 @app.route("/articles")
 def list_articles():
     con = cnx.cursor()
-    topic = "Don't panic, but the Milky Way Galaxy is forming 'inside out'"
+
+    topic = 'Bitcoin attacked by politicians and bankers at Davos'
+    #topic = "Don't panic, but the Milky Way Galaxy is forming 'inside out'"
+    quoted_url = request.args.get('url')
+    if quoted_url:
+        current_url = urllib.unquote(quoted_url)
+        con.execute('SELECT topic_title,url FROM article WHERE url = %s', (current_url,))
+        results = con.fetchall()
+        if results:
+            topic=results[0][0]
+
     con.execute("SELECT grade_level, url, title, body FROM article WHERE topic_title = %s ORDER BY grade_level DESC;", (topic,) )
 
     query_results = con.fetchall()
