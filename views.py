@@ -5,8 +5,8 @@ from flask import Flask, render_template, request
 import mysql.connector
 import re
 import urllib
+from NewsSpectrum import app
 
-app = Flask(__name__)
 cnx = mysql.connector.connect(user='root', password='', 
                 database='news', host='localhost')
 #db = MySQLdb.connect(user="root", host="localhost", port=3306, db="world", passwd="root")
@@ -124,5 +124,3 @@ def regularpage(pagename=None):
 if __name__ == '__main__':
     print "Starting debugging server."
     app.run(debug=True, host='localhost', port=8000)
-
-
