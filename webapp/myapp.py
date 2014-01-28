@@ -84,7 +84,11 @@ def list_articles():
     query_results = con.fetchall()
     #query_results = db.store_result().fetch_row(maxrows=0)
     articles = []
+    total_num_articles = len(query_results)
+    want_num_articles = 7
     for i_article, result in enumerate(query_results):
+        if i_article % (total_num_articles / want_num_articles) != 0:
+            continue
         url = result[1]
         m_domain = re.match(r'http://(www\.)?([^/]*)', url)
         domain = "unknown"
@@ -106,7 +110,6 @@ def list_topics():
     for result in query_results:
         all_articles.append(dict(topic_title=result[0]))
     return render_template('topics.html', articles=all_articles) 
-
 
 @app.route('/<pagename>') 
 def regularpage(pagename=None): 
