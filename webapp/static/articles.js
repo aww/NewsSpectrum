@@ -1,4 +1,5 @@
 $(document).ready(function(){
+/*
 	$("a.article-link").click(function(event){
 		event.preventDefault()
 	    //console.log("Clicked ".concat($(this).attr("href")));
@@ -7,4 +8,5 @@ $(document).ready(function(){
 		$("div#".concat(articleId)).show()
 	    console.log("Clicked id=".concat(articleId));
 	});
+*/
 });

@@ -22,22 +22,22 @@ img.banner-spectrum {
 }
 
 .article-body {
-	font-size: larger;
-	color: #505050;
+	/* font-size: larger; */
+	/* color: #505050; */
 }
 
 .article-title {
-	color: #900000;
-	font-size: 150%;
+	/* color: #900000; */
+	/* font-size: 150%; */
 }
 
 
 .topic-title {
 	font-style: italic;
-	color: #909090;
+	/* color: #909090; */
 }
 .topic-title-text {
-	font-size: 70%;
+	/* font-size: 70%; */
 }
 
 h1 > img {
@@ -45,12 +45,12 @@ h1 > img {
 	width: 857px;
 }
 
-td.grade-level {
+.grade-level {
 	font-size: smaller;
 	color: #909090;
 }
 
 .article-publisher {
-	font-size: 150%;
+	/* font-size: 150%; */
 	font-style: italic;
 }

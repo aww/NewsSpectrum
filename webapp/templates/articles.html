@@ -1,32 +1,71 @@
 {% extends "wrapper.html" %}
 
 {% block body %}
-<h1>News Spectrum <img src="static/myspectrum.png" /></h1>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a href="/" class="navbar-brand">News Spectrum</a>
+          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+        </div>
+        <div class="navbar-collapse collapse" id="navbar-main">
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Examples <span class="caret"></span></a>
+              <ul class="dropdown-menu" aria-labelledby="examples">
+                <li><a tabindex="-1" href="/articles?url=http%3A//www.nbcnews.com/business/worst-performing-most-minicars-fail-new-frontal-crash-test-2D11968197">Small car crashes</a></li>
+                <!-- <li class="divider"></li> -->
+              </ul>
+            </li>
+            <li><a href="/about">About</a></li>
+          </ul>
+          <form class="navbar-form navbar-right">
+            <input class="form-control col-lg-9" placeholder="New article URL" type="text" size="70">
+          </form>
+        </div>
+      </div>
+    </div>
 
-<div class="browse-column col-md-3">
-  <h2><span class="topic-title-text"><span class="topic-title">{{ topic }}</span></span></h2>
-  <table class="table table-hover">
-    <tr><th class="grade-level">Level</th><th>Source</th></tr>
-    {% for article in articles %}
-    <tr><td class="grade-level">{{ article['grade_level'] }}</td><td><a id="article-link-{{ article['i'] }}" class="article-link" href="{{ article['url'] }}">{{ article['domain'] }}</a></td></tr>
-    {% endfor %}
-  </table>
-</div>
-<div class="article-box col-md-8">
-  {% for article in articles %}
-  <div class="article" id="article-{{ article['i'] }}">
-	<h4><span class="article-publisher">{{ article['domain'] }}</span></h4>
-	<div class="source-ref">
-	  Source: <a href="{{ article['url'] }}">{{ article['url'] }}</a>
-    </div>
-    <h3> <span class="article-title">{{ article['title'] }}</span></h3>
-	<div class="article-body">
-      {{ article['body'] }}
-    </div>
-  </div>
-  {% endfor %}
-  <!-- <iframe class="article-frame" width="1100px" height="80%" src="http://www.theregister.co.uk/2014/01/21/milky_way_inside_out/" /> -->
-</div>
+
+    <div class="container">
+      <div class="page-header" id="banner">
+        <div class="row">
+          <div class="col-lg-12">
+			<!--
+			<h1>News Spectrum <img src="static/myspectrum.png" /></h1>
+			-->
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs">
+              {% for article in articles %}
+              <li><a href="#article-{{ article['i'] }}" data-toggle="tab"><span class="grade-level">{{ article['grade_level'] }}</span> <br/> {{ article['domain'] }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab panes -->
+	  <div class="tab-content">
+		{% for article in articles %}
+		<div class="tab-pane active" id="article-{{ article['i'] }}">
+		  <h3 class="source-ref">
+			Source: <a href="{{ article['url'] }}"><span class="article-publisher">{{ article['domain'] }}</span></a>
+		  </h3>
+		  <h2>
+			<span class="article-title">{{ article['title'] }}</span>
+		  </h2>
+		  <div class="article-body">
+			{{ article['body'] }}
+		  </div>
+		</div>
+		{% endfor %}
+	  </div>
+
+	</div>
+<!-- <iframe class="article-frame" width="1100px" height="80%" src="http://www.theregister.co.uk/2014/01/21/milky_way_inside_out/" /> -->
 {% endblock %}
 
 {% block js %}
