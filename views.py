@@ -88,10 +88,14 @@ def list_articles():
 
     query_results = con.fetchall()
     #query_results = db.store_result().fetch_row(maxrows=0)
+    selected_results = []
+    for q in query_results:
+        if len(q[3]) > 200:
+            selected_results.append(q)
     articles = []
-    total_num_articles = len(query_results)
+    total_num_articles = len(selected_results)
     want_num_articles = 7
-    for i_article, result in enumerate(query_results):
+    for i_article, result in enumerate(selected_results):
         if i_article % (total_num_articles / want_num_articles) != 0:
             continue
         url = result[1]
