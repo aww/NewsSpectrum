@@ -5,24 +5,20 @@
 
     <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
-        <div class="navbar-header">
-          <a href="/" class="navbar-brand">News Spectrum</a>
-          <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-        </div>
         <div class="navbar-collapse collapse" id="navbar-main">
           <ul class="nav navbar-nav">
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Examples <span class="caret"></span></a>
               <ul class="dropdown-menu" aria-labelledby="examples">
-                <li><a tabindex="-1" href="/articles?url=http%3A//www.nbcnews.com/business/worst-performing-most-minicars-fail-new-frontal-crash-test-2D11968197">Small car crashes</a></li>
+		{% for example in examples %}
+                <li><a tabindex="-1" id="example-{{ loop.index }}" href="#">{{ example[1] }}</a></li>
+		{% endfor %}
                 <!-- <li class="divider"></li> -->
               </ul>
             </li>
-            <li><a href="/about">About</a></li>
+	  </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://slid.es/aww/news-spectrum">Slides</a></li>
           </ul>
         </div>
       </div>
@@ -58,9 +54,9 @@
 	  <img class="banner-spectrum" src="static/myspectrum.png" width="857" height="40" /> <!-- actual height is 83px -->
       <p class="lead">Given a current news article on technology, health, or science<br/>
 		find a spectrum of others on the same topic.</p>
-      <form class="form-inline" role="form">
+      <form class="form-inline" role="form" action="/articles" method="get">
         <div class="form-group">
-          <input type="url" class="form-control" id="inputURL" placeholder="Enter an article URL" size="100">
+          <input type="url" class="form-control" id="url" name="url" placeholder="Enter an article URL" size="100">
         </div>
         <button type="submit" class="btn btn-primary btn-lg">Go</button>
       </form>                                 
@@ -69,4 +65,17 @@
   </div><!-- /.container -->
 
 </div>
+{% endblock %}
+
+{% block js %}
+<script type="text/javascript">
+$(document).ready(function(){
+  {% for example in examples %}
+  $("#example-{{ loop.index }}").click(function(event){
+    event.preventDefault()
+    $("#url").val("{{ example[0] }}");
+  });
+  {% endfor %}
+});
+</script>
 {% endblock %}

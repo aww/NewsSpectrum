@@ -5,10 +5,14 @@ from flask import Flask, render_template, request
 import mysql.connector
 import re
 import urllib
-from NewsSpectrum import app
+from NewsSpectrum import app, examples
+import dbinfo
 
-cnx = mysql.connector.connect(user='root', password='', 
-                database='news', host='localhost')
+cnx = mysql.connector.connect(user=dbinfo.user,
+                              password=dbinfo.password, 
+                              database=dbinfo.database,
+                              host=dbinfo.host,
+                              port=dbinfo.port)
 #db = MySQLdb.connect(user="root", host="localhost", port=3306, db="world", passwd="root")
 
 @app.route("/")
@@ -20,7 +24,8 @@ def search():
         query_results = con.fetchall()
         if len(query_results) > 0:
             pass
-    return render_template('landing.html')
+        print examples
+    return render_template('landing.html', examples=examples)
 
 # def hello():
 #     return render_template('index.html') 
@@ -95,7 +100,7 @@ def list_articles():
         if m_domain:
             domain = m_domain.group(2)
         articles.append(dict(i=i_article, grade_level="%.1f" % result[0], url=url, domain=domain, title=result[2], body=result[3]))
-    return render_template('articles.html', articles=articles, topic=topic) 
+    return render_template('articles.html', articles=articles, topic=topic, examples=examples)
 
 
 

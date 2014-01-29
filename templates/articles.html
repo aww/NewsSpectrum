@@ -16,14 +16,15 @@
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#" id="themes">Examples <span class="caret"></span></a>
               <ul class="dropdown-menu" aria-labelledby="examples">
-                <li><a tabindex="-1" href="/articles?url=http%3A//www.nbcnews.com/business/worst-performing-most-minicars-fail-new-frontal-crash-test-2D11968197">Small car crashes</a></li>
+		{% for example in examples %}
+                <li><a tabindex="-1" href="?url={{ example[0] }}">{{ example[1] }}</a></li>
+		{% endfor %}
                 <!-- <li class="divider"></li> -->
               </ul>
             </li>
-            <li><a href="/about">About</a></li>
           </ul>
-          <form class="navbar-form navbar-right">
-            <input class="form-control col-lg-9" placeholder="New article URL" type="text" size="70">
+          <form class="navbar-form navbar-right" action="#" method="get">
+            <input class="form-control col-lg-9" placeholder="New article URL" type="text" size="40" name="url">
           </form>
         </div>
       </div>
