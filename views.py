@@ -1,6 +1,6 @@
 
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 #import MySQLdb
 import mysql.connector
 import re
@@ -27,35 +27,6 @@ def search():
         print examples
     return render_template('landing.html', examples=examples)
 
-# def hello():
-#     return render_template('index.html') 
-
-# @app.route("/db")
-# def cities_page():
-#     con = cnx.cursor()
-#     con.execute("SELECT Name FROM City")
-#     #db.query("SELECT Name FROM city;")
-
-#     query_results = con.fetchall()
-#     #query_results = db.store_result().fetch_row(maxrows=0)
-#     cities = ""
-#     for result in query_results:
-#         cities += result[0] #unicode(result[0], 'utf8')
-#         cities += "<br>"
-#     return cities
-
-# @app.route("/db_fancy")
-# def cities_page_fancy():
-#     con = cnx.cursor()
-#     con.execute("SELECT Name, CountryCode, Population FROM City;")
-
-#     query_results = con.fetchall()
-#     #query_results = db.store_result().fetch_row(maxrows=0)
-#     cities = []
-#     for result in query_results:
-#         cities.append(dict(name=result[0], country=result[1], population=result[2]))
-#     return render_template('cities.html', cities=cities) 
-
 
 @app.route("/all_articles")
 def list_all_articles():
@@ -72,40 +43,66 @@ def list_all_articles():
 
 @app.route("/articles")
 def list_articles():
+    json_url = "/_get_articles"
+    quoted_url = request.args.get('url')
+    if quoted_url:
+        json_url += "?url=" + quoted_url
+    else:
+        quoted_url = "http%3A//www.techtimes.com/articles/2897/20140123/archaeologists-stumped-by-discovery-of-3600-year-old-pharaoh-woseribre-senebkay-tomb.htm"
+
+    current_url = urllib.unquote(quoted_url)
+
+    return render_template('articles.html', examples=examples, json_url=json_url, current_url=current_url)
+
+
+@app.route("/_get_articles")
+def get_articles():
     con = cnx.cursor()
 
     topic = 'Bitcoin attacked by politicians and bankers at Davos'
-    #topic = "Don't panic, but the Milky Way Galaxy is forming 'inside out'"
+    topic = "Don't panic, but the Milky Way Galaxy is forming 'inside out'"
     quoted_url = request.args.get('url')
     if quoted_url:
         current_url = urllib.unquote(quoted_url)
-        con.execute('SELECT topic_title,url FROM article WHERE url = %s', (current_url,))
+        con.execute('SELECT topic_title,url FROM article WHERE url = %s LIMIT 1', (current_url,))
         results = con.fetchall()
         if results:
             topic=results[0][0]
 
-    con.execute("SELECT grade_level, url, title, body FROM article WHERE topic_title = %s ORDER BY grade_level DESC;", (topic,) )
+    con.execute("SELECT grade_level, url, title, body FROM article WHERE topic_title = %s AND LENGTH(body) > 200 ORDER BY grade_level DESC;", (topic,) )
 
     query_results = con.fetchall()
-    #query_results = db.store_result().fetch_row(maxrows=0)
+
+    n_groups = 7
+    articles_per_group = len(query_results) / n_groups
+
+    def group(lst, n):
+        '''Group the list into tuples of size n except potentially the last group'''
+        grps = zip(*[lst[i::n] for i in range(n)])
+        if len(lst) % n != 0:
+            grps.append( tuple(lst[-(len(lst) % n):]) )
+        return grps
+
     selected_results = []
-    for q in query_results:
-        if len(q[3]) > 200:
-            selected_results.append(q)
+    current_grade_level = 0
+    for group in group(query_results, articles_per_group):
+        selected_result = group[0] # by default just pick the first one
+        for result in group:
+            if current_url == result[1]:
+                selected_result = result
+                current_grade_level = result[0]
+        selected_results.append(selected_result)
+
     articles = []
-    total_num_articles = len(selected_results)
-    want_num_articles = 7
-    for i_article, result in enumerate(selected_results):
-        if i_article % (total_num_articles / want_num_articles) != 0:
-            continue
-        url = result[1]
+    for result in selected_results:
+        grade_level, url, title, body = result[:4]
         m_domain = re.match(r'http://(www\.)?([^/]*)', url)
         domain = "unknown"
         if m_domain:
             domain = m_domain.group(2)
-        articles.append(dict(i=i_article, grade_level="%.1f" % result[0], url=url, domain=domain, title=result[2], body=result[3]))
-    return render_template('articles.html', articles=articles, topic=topic, examples=examples)
+        articles.append(dict(grade_level="%.1f" % grade_level, url=url, domain=domain, title=title, body=body))
 
+    return jsonify(articles=articles, topic=topic, current_grade_level=current_grade_level)
 
 
 @app.route("/topics")

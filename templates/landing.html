@@ -17,43 +17,21 @@
               </ul>
             </li>
 	  </ul>
-          <ul class="nav navbar-nav navbar-right">
+	  <ul class="nav navbar-nav navbar-right">
+	    <li><a title="" data-placement="bottom" data-toggle="tooltip" data-original-title="A project created as part of the Insight Data Science Fellows Program" href="http://insightdatascience.com/">Insight Data Science</a></li>
             <li><a href="http://slid.es/aww/news-spectrum">Slides</a></li>
           </ul>
         </div>
       </div>
     </div>
-  <!--
-  <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#">Project name</a>
-      </div>
-      <div class="collapse navbar-collapse">
-        <ul class="nav navbar-nav">
-          <li class="active"><a href="#">Home</a></li>
-          <li><a href="#about">About</a></li>
-          <li><a href="#contact">Contact</a></li>
-        </ul>
-      </div><!--/.nav-collapse -->
-  <!--
-    </div>
-  </div>
-  -->
 
   <div class="container">
 	
     <div class="starter-template">
-      <h1>News Spectrum</h1>
-	  <img class="banner-spectrum" src="static/myspectrum.png" width="857" height="40" /> <!-- actual height is 83px -->
-      <p class="lead">Given a current news article on technology, health, or science<br/>
-		find a spectrum of others on the same topic.</p>
+      <h1>News Spectra</h1>
+      <img class="banner-spectrum" src="static/myspectrum.png" width="857" height="83" />
+      <p class="lead">From a current news article on technology, health, or science<br/>
+		find a spectrum of articles on the same topic.</p>
       <form class="form-inline" role="form" action="/articles" method="get">
         <div class="form-group">
           <input type="url" class="form-control" id="url" name="url" placeholder="Enter an article URL" size="100">
@@ -74,6 +52,9 @@ $(document).ready(function(){
   $("#example-{{ loop.index }}").click(function(event){
     event.preventDefault()
     $("#url").val("{{ example[0] }}");
+  });
+  $(function () {
+    $("[data-toggle='tooltip']").tooltip();
   });
   {% endfor %}
 });
