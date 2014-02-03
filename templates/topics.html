@@ -3,8 +3,13 @@
 {% block body %}
 <table class="table table-hover">
   <tr><th>Topic Title</th></tr>
-  {% for article in articles %}
-  <tr><td>{{ article['topic_title'] }}</td></tr>
+  {% for topic in topics %}
+  <tr><td>
+      {{ topic['topic_title'] }}
+      {% for url in topic['urls'] %}
+      <a href="/articles?url={{ url }}">{{ loop.index }}</a>
+      {% endfor %}
+  </td></tr>
   {% endfor %}
 </table>
 {% endblock %}

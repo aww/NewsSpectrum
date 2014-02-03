@@ -57,11 +57,18 @@ h1 > img {
 	font-style: italic;
 }
 
-.spectrum-marker {
+.spectrum-marker, .spectrum-marker-current, .example-spectrum-marker, .example-spectrum-marker-current {
     fill:         #2d578b;
     stroke:       white;
-    stroke-width: 2;
+    stroke-width: .2;
 }
-.spectrum-marker:hover {
+.example-spectrum-marker, .example-spectrum-marker-current {
+    stroke:       black;
+}
+.spectrum-marker:hover, .spectrum-marker-current:hover {
     fill: red;
+}
+
+#banner {
+    margin-top: 65px;
 }

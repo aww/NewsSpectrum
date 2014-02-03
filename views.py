@@ -52,7 +52,7 @@ def list_articles():
 
     current_url = urllib.unquote(quoted_url)
 
-    return render_template('articles.html', examples=examples, json_url=json_url, current_url=current_url)
+    return render_template('articles.html', examples=map(lambda x: (urllib.quote(x[0]), x[1]), examples), json_url=json_url, current_url=current_url)
 
 
 @app.route("/_get_articles")
@@ -73,7 +73,7 @@ def get_articles():
 
     query_results = con.fetchall()
 
-    n_groups = 7
+    n_groups = 14
     articles_per_group = len(query_results) / n_groups
 
     def group(lst, n):
@@ -102,20 +102,26 @@ def get_articles():
             domain = m_domain.group(2)
         articles.append(dict(grade_level="%.1f" % grade_level, url=url, domain=domain, title=title, body=body))
 
-    return jsonify(articles=articles, topic=topic, current_grade_level=current_grade_level)
+    return jsonify(articles=articles, topic=topic, current_grade_level=current_grade_level, current_url=current_url)
 
 
 @app.route("/topics")
 def list_topics():
     con = cnx.cursor()
-    con.execute("SELECT topic_title FROM article GROUP BY topic_title;")
+    con.execute("SELECT topic_title, url FROM article ORDER BY topic_title, grade_level;")
 
+    prev_title = None
     query_results = con.fetchall()
-    #query_results = db.store_result().fetch_row(maxrows=0)
-    all_articles = []
+    topics = []
     for result in query_results:
-        all_articles.append(dict(topic_title=result[0]))
-    return render_template('topics.html', articles=all_articles) 
+        title = result[0]
+        url = result[1]
+        if title == prev_title:
+            topics[-1]['urls'].append(url)
+        else:
+            topics.append(dict(topic_title=title, urls=[url]))
+            prev_title = title
+    return render_template('topics.html', topics=topics) 
 
 @app.route('/<pagename>') 
 def regularpage(pagename=None): 
