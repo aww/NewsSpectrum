@@ -102,6 +102,15 @@ $(document).ready(function(){
 	//x.domain([d3.max(data.articles, function(d) { return d.grade_level; }),
 	//          d3.min(data.articles, function(d) { return d.grade_level; })]);
 	//x.domain([24, 0])
+	if (data.articles.length < 1) {
+	    plotarea.append("svg:text")
+		.attr("x", width/2)
+		.attr("y", height/2)
+		.attr("alignment-baseline", "middle")
+		.attr("text-anchor", "middle")
+		.text("Sorry, no similar articles were found in the database.")
+		.attr("style", "font-size: 200%")
+	}
 	
 	plotarea.append("line")
 	    .attr("x1", x(data.current_grade_level))
