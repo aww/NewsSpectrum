@@ -1,6 +1,6 @@
 
 import os
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, g
 #import MySQLdb
 import mysql.connector
 import re
@@ -8,18 +8,28 @@ import urllib
 from NewsSpectrum import app, examples
 import dbinfo
 
-cnx = mysql.connector.connect(user=dbinfo.user,
+#db = MySQLdb.connect(user="root", host="localhost", port=3306, db="world", passwd="root")
+
+@app.before_request
+def before_request():
+    g.cnx = mysql.connector.connect(user=dbinfo.user,
                               password=dbinfo.password, 
                               database=dbinfo.database,
                               host=dbinfo.host,
                               port=dbinfo.port)
-#db = MySQLdb.connect(user="root", host="localhost", port=3306, db="world", passwd="root")
+
+@app.teardown_request
+def teardown_request(exception):
+    cnx = getattr(g, 'cnx', None)
+    if cnx is not None:
+        cnx.close()
+
 
 @app.route("/")
 def search():
     url = request.args.get('url')
     if url:
-        con.cnx.cursor()
+        con = g.cnx.cursor()
         con.execute("SELECT url, topic_title FROM article WHERE url = %s", (url,))
         query_results = con.fetchall()
         if len(query_results) > 0:
@@ -30,7 +40,7 @@ def search():
 
 @app.route("/all_articles")
 def list_all_articles():
-    con = cnx.cursor()
+    con = g.cnx.cursor()
     con.execute("SELECT grade_level, url, topic_title, reading_ease, ari FROM article ORDER BY topic_title, grade_level;")
 
     query_results = con.fetchall()
@@ -57,7 +67,7 @@ def list_articles():
 
 @app.route("/_get_articles")
 def get_articles():
-    con = cnx.cursor()
+    con = g.cnx.cursor()
 
     topic = 'Bitcoin attacked by politicians and bankers at Davos'
     topic = "Don't panic, but the Milky Way Galaxy is forming 'inside out'"
@@ -68,6 +78,10 @@ def get_articles():
         results = con.fetchall()
         if results:
             topic=results[0][0]
+        else:
+            return jsonify(articles=[])
+    else:
+        return jsonify(articles=[])
 
     con.execute("SELECT grade_level, url, title, body FROM article WHERE topic_title = %s AND LENGTH(body) > 200 ORDER BY grade_level DESC;", (topic,) )
 
@@ -107,7 +121,7 @@ def get_articles():
 
 @app.route("/topics")
 def list_topics():
-    con = cnx.cursor()
+    con = g.cnx.cursor()
     con.execute("SELECT topic_title, url FROM article ORDER BY topic_title, grade_level;")
 
     prev_title = None
