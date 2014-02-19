@@ -44,13 +44,13 @@ $(document).ready(function(){
 	.attr("x", x(4.2))
 	.attr("dy", "-.2em")
         .attr("text-anchor", "start")
-	.attr("stroke", "white")
+	.attr("fill", "white")
 	.text("\u2190 lower reading level")
     labels.append("text")
 	.attr("x", x(23.8))
 	.attr("dy", "-.2em")
         .attr("text-anchor", "end")
-	.attr("stroke", "white")
+	.attr("fill", "white")
 	.text("higher reading level \u2192")
 
 
